@@ -66,6 +66,8 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+      //  setTimeout(checkIfWin(), 100);
+        checkIfWin();
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -89,6 +91,19 @@ var Engine = (function(global) {
         })
     }
 
+    /*这个函数由于检查玩家的坐标是否满足获胜的条件*/
+    function checkIfWin() {
+        if (player.x === 202 && player.y === -40)
+        {
+            console.log('nice');
+            if(window.confirm("你拿到了钥匙！重新开始吗?")){
+                reset();
+            } else {
+                reset();
+            }
+        }
+    }
+
     /* 这个函数做了一些游戏的初始渲染，然后调用 renderEntities 函数。记住，这个函数
      * 在每个游戏的时间间隙都会被调用一次（或者说游戏引擎的每个循环），因为这就是游戏
      * 怎么工作的，他们就像是那种每一页上都画着不同画儿的书，快速翻动的时候就会出现是
@@ -102,7 +117,7 @@ var Engine = (function(global) {
                 'images/stone-block.png',   // 第二行石头
                 'images/stone-block.png',   // 第三行石头
                 'images/grass-block.png',   // 第一行草地
-                'images/grass-block.png'    // 第二行草地
+                'images/grass-block.png', // 第二行草地
             ],
             numRows = 6,
             numCols = 5,
@@ -116,9 +131,12 @@ var Engine = (function(global) {
                  * 我们需要的图片，这样我们可以享受缓存图片的好处，因为我们会反复的用到这些图片
                  */
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                if(row === 0) {
+                    ctx.drawImage(Resources.get('images/stone-block.png'), 202, 0);
+                }
             }
         }
-
+        ctx.drawImage(Resources.get('images/Key.png'), 202, -40);
         renderEntities();
     }
 
@@ -139,6 +157,8 @@ var Engine = (function(global) {
      * 函数调用一次。
      */
     function reset() {
+        player.x = 202;
+        player.y = 292;
         // 空操作
     }
 
@@ -150,7 +170,10 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Key.png',
+        'images/Heart.png',
+        'images/Gem Blue.png'
     ]);
     Resources.onReady(init);
 
